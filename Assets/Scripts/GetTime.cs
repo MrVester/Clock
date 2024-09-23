@@ -8,6 +8,8 @@ using UnityEngine.Networking;
 public class GetTime : MonoBehaviour
 {
     [SerializeField] private bool lever = false;
+    private float timer=0;
+    [SerializeField] private double timeBetweenSyncSec = 3600;
     [SerializeField] Button syncButton;
     public MyClock newClock;
     private string url = "https://yandex.com/time/sync.json";
@@ -15,20 +17,21 @@ public class GetTime : MonoBehaviour
     private void Awake()
     {
         syncButton.onClick.AddListener(()=>StartCoroutine(UpdateTime()));
+
     }
 
     private void Start()
     {
         StartCoroutine(UpdateTime());
-        
     }
 
     void Update()
     {
-        if (lever)     //MAKE UPDATE EVERY HOUR
+        timer += Time.deltaTime;
+        if (timer>= timeBetweenSyncSec) 
         {
             StartCoroutine(UpdateTime());
-            lever = false;
+            timer = 0;
         }
     }
 
@@ -47,6 +50,7 @@ public class GetTime : MonoBehaviour
                 MyTime data = JsonUtility.FromJson<MyTime>(jsonvalue);
                 newClock = new MyClock(data.time);
                 GameEvents.current.UpdateTime(newClock.GetDateTime());
+                print("Time updated");
             }
         }
     }

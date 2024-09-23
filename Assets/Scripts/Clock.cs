@@ -1,13 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Clock : MonoBehaviour
 {
     public GameObject SArrow;
     public GameObject MArrow;
     public GameObject HArrow;
-    [SerializeField] private TMP_Text timeText;
+    public TMP_InputField inputField;
     private int inGameSeconds=0;
     private float timeAtStart;
     private bool isChangingTime;
@@ -15,6 +16,7 @@ public class Clock : MonoBehaviour
     private void Start()
     {
         GameEvents.current.onChangingTime += SetChangingTime;
+        GameEvents.current.onChangingTime += (a)=> { inputField.interactable = a; };
         GameEvents.current.onTimeUpdated += UpdateClockTime;
     }
     private void UpdateClockTime(DateTime dateTime)
@@ -47,6 +49,6 @@ public class Clock : MonoBehaviour
     private void UpdateTime()
     {
         DateTime digitalTime = DateTimeOffset.FromUnixTimeSeconds(inGameSeconds).UtcDateTime;
-        timeText.text= digitalTime.ToString("HH:mm:ss");
+        inputField.text= digitalTime.ToString("HH:mm:ss");
     }
 }

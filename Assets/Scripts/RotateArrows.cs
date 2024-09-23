@@ -9,7 +9,7 @@ public class RotateArrows : MonoBehaviour
     private Quaternion StartRotation;
     private Camera _mainCam;
     private RaycastHit2D rayHit;
-    public bool canChangeTime = false;
+    private bool canChangeTime = false;
     /*    [SerializeField] private Transform HArrow;
         [SerializeField] private Transform MArrow;*/
     private void Start()
@@ -17,7 +17,10 @@ public class RotateArrows : MonoBehaviour
         _mainCam = Camera.main;
         screenWidth = Screen.width;
     }
-
+    public void SetChangeTime(bool flag)
+    {
+        canChangeTime = flag;
+    }
     void Update()
     {
         if (canChangeTime)

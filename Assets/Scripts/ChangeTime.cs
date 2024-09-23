@@ -36,7 +36,7 @@ public class ChangeTime : MonoBehaviour
     }
     private void EnableChangingTime()
     {
-        rotateArrows.canChangeTime = true;
+        rotateArrows.SetChangeTime(true);
         EnableSetButtons();
         GameEvents.current.ChangeTime(true);
     }
@@ -53,14 +53,17 @@ public class ChangeTime : MonoBehaviour
     }
     private void SetTimeByKeyBoard()
     {
-        int seconds=0;
-        DateTime keyboardTime = DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime;
-        GameEvents.current.UpdateTime(keyboardTime);
-        AfterSetTime();
+        DateTime keyboardTime;
+        if (DateTime.TryParse(clock.inputField.text, out keyboardTime))
+        {
+            GameEvents.current.UpdateTime(keyboardTime);
+            AfterSetTime();
+        }
+           
     }
-        private void AfterSetTime()
+    private void AfterSetTime()
     {
-        rotateArrows.canChangeTime = false;
+        rotateArrows.SetChangeTime(false);
         buttonText.text = "Change time";
         setByClockButton.gameObject.SetActive(false);
         setByKeyboardButton.gameObject.SetActive(false);
